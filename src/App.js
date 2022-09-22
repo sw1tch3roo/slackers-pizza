@@ -5,12 +5,22 @@ import PizzaHeader from './components/header/PizzaHeader';
 import PizzaBlock from './components/pizzaBlock/PizzaBlock';
 import PizzaSort from './components/sort/PizzaSort';
 
-import pizzas from './assets/pizzas.json';
 import axios from 'axios';
 
 import './scss/app.scss';
 
 function App() {
+  const [items, setItems] = React.useState([]); // массив пицц
+
+  React.useEffect(() => {
+    // useEffect() позволяет отлавливать действия (служит для первого рендера приложения  )
+    axios
+      .get('https://632cad725568d3cad88ad212.mockapi.io/items')
+      .then((response) => setItems(response.data));
+  }, []); // второй параметр - условие (в данном случае [] - didMount), то есть функция сработает только один раз
+  // при изменении массива вызывается функция (если передать items - будет бесконечный вызов функции)
+  // так как каждый раз массив items обновляется (срабатывает изменение состояния - setItems(items))
+
   return (
     <div className="wrapper">
       <PizzaHeader />
@@ -22,21 +32,25 @@ function App() {
           </div>
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
-            {pizzas.map((pizza) => {
-              return (
-                <PizzaBlock
-                  key={pizza.id}
-                  {...pizza} // spread-оператор
-                  // дестректурием объект (вытаскиваем все свойства объекта и передаем в компонент)
+            {items === [] ? (
+              <h3>Ожидаем пиццу...</h3>
+            ) : (
+              items.map((pizza) => {
+                return (
+                  <PizzaBlock
+                    key={pizza.id}
+                    {...pizza} // spread-оператор
+                    // дестректурием объект (вытаскиваем все свойства объекта и передаем в компонент)
 
-                  // name={pizza.name} т
-                  // price={pizza.price}
-                  // image={pizza.imageUrl}
-                  // types={pizza.types}
-                  // sizes={pizza.sizes}
-                />
-              );
-            })}
+                    // name={pizza.name} т
+                    // price={pizza.price}
+                    // image={pizza.imageUrl}
+                    // types={pizza.types}
+                    // sizes={pizza.sizes}
+                  />
+                );
+              })
+            )}
           </div>
         </div>
       </div>
