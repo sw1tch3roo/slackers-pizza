@@ -6,6 +6,8 @@ const PizzaBlock = ({ name, price, image, types, sizes }) => {
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
 
+  // <React.Fragment></React.Fragment> так можно делать, чтобы не использовать родительский div при return'е из компонента
+
   return (
     <div className="pizza-block">
       <img className="pizza-block__image" src={image} alt="Pizza" />
@@ -16,9 +18,9 @@ const PizzaBlock = ({ name, price, image, types, sizes }) => {
             // в type 0 / 1
             return (
               <li
+                key={indexType}
                 onClick={() => setActiveType(type)}
                 className={activeType === indexType ? 'active' : ''}
-                key={indexType}
               >
                 {typeNames[type]}
               </li>
@@ -27,10 +29,11 @@ const PizzaBlock = ({ name, price, image, types, sizes }) => {
         </ul>
         <ul>
           {sizes.map((size, indexSize) => {
+            //в массиве sizes содержатся размеры пиццы (26 / 30 / 40)
             return (
               <li
-                onClick={() => setActiveSize(indexSize)}
                 key={indexSize}
+                onClick={() => setActiveSize(indexSize)}
                 className={activeSize === indexSize ? 'active' : ''}
               >
                 {size} см

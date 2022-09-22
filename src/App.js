@@ -1,9 +1,12 @@
+import React from 'react';
+
 import PizzaCategories from './components/categories/PizzaCategories';
 import PizzaHeader from './components/header/PizzaHeader';
 import PizzaBlock from './components/pizzaBlock/PizzaBlock';
 import PizzaSort from './components/sort/PizzaSort';
 
 import pizzas from './assets/pizzas.json';
+import axios from 'axios';
 
 import './scss/app.scss';
 
@@ -24,8 +27,9 @@ function App() {
                 <PizzaBlock
                   key={pizza.id}
                   {...pizza} // spread-оператор
+                  // дестректурием объект (вытаскиваем все свойства объекта и передаем в компонент)
 
-                  // name={pizza.name}
+                  // name={pizza.name} т
                   // price={pizza.price}
                   // image={pizza.imageUrl}
                   // types={pizza.types}

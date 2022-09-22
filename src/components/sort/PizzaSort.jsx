@@ -1,6 +1,16 @@
 import React from 'react';
 
 const PizzaSort = () => {
+  const listOfSort = ['популярности', 'цене', 'алфавиту'];
+
+  const [isOpenPopup, setIsOpenPopup] = React.useState(false); // pop-up окно сортировки
+  const [sortBy, setSortBy] = React.useState(0);
+
+  const onClickSort = (index) => {
+    setSortBy(index); // выбираем сортировку
+    setIsOpenPopup(!isOpenPopup); // закрываем popup-окно
+  };
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -17,15 +27,25 @@ const PizzaSort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span onClick={() => setIsOpenPopup(!isOpenPopup)}>{listOfSort[sortBy]}</span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {isOpenPopup && (
+        <div className="sort__popup">
+          <ul>
+            {listOfSort.map((typeOfSort, index) => {
+              return (
+                <li
+                  key={index}
+                  onClick={() => onClickSort(index)}
+                  className={sortBy === index ? 'active' : ''}
+                >
+                  {typeOfSort}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
