@@ -1,4 +1,6 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
+
 import logoPizza from '../../assets/img/pizza-logo.svg';
 
 const Header = () => {
@@ -13,7 +15,7 @@ const Header = () => {
           </div>
         </div>
         <div className="header__cart">
-          <a href="/cart.html" className="button button--cart">
+          <div className="button button--cart">
             <span>520 ₽</span>
             <div className="button__delimiter"></div>
             <svg
@@ -46,7 +48,7 @@ const Header = () => {
               />
             </svg>
             <span>3</span>
-          </a>
+          </div>
         </div>
       </div>
     </div>
