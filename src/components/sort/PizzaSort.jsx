@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PizzaSort = () => {
-  const listOfSort = ['популярности', 'цене', 'алфавиту'];
+  const listOfSort = ['по рейтингу', 'по цене', 'по алфавиту'];
 
   const [isOpenPopup, setIsOpenPopup] = React.useState(false); // pop-up окно сортировки
   const [sortBy, setSortBy] = React.useState(0);
@@ -26,7 +26,7 @@ const PizzaSort = () => {
             fill="#2C2C2C"
           />
         </svg>
-        <b>Сортировка по:</b>
+        <b>Сортировка:</b>
         <span onClick={() => setIsOpenPopup(!isOpenPopup)}>{listOfSort[sortBy]}</span>
       </div>
       {isOpenPopup && (
