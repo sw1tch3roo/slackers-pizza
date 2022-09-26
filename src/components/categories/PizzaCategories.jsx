@@ -1,12 +1,7 @@
 import React from 'react';
 
-const Categories = () => {
+const Categories = ({ activeCategory, onChangeCategory }) => {
   const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
-  const [activeCategory, setActiveCategory] = React.useState(0);
-
-  const onClickCategory = (index) => {
-    setActiveCategory(index);
-  };
 
   return (
     <div className="categories">
@@ -16,7 +11,7 @@ const Categories = () => {
           return (
             <li
               key={index}
-              onClick={() => onClickCategory(index)} // по индексу делаем перерендер
+              onClick={() => onChangeCategory(index)} // по индексу делаем перерендер
               className={activeCategory === index ? 'active' : ''}
             >
               {category}
