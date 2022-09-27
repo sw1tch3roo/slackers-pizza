@@ -9,7 +9,7 @@ import axios from 'axios';
 
 import '../scss/app.scss';
 
-const Home = () => {
+const Home = ({ searchValue }) => {
   const [items, setItems] = React.useState([]); // массив пицц
   const [isLoading, setIsLoading] = React.useState(Boolean);
 
@@ -25,20 +25,21 @@ const Home = () => {
     const category = activeCategory > 0 ? `category=${activeCategory}` : '';
     const sortBy = activeSort.sortProperty.replace('-', '');
     const order = activeSort.sortProperty.includes('-') ? 'asc' : 'desc';
+    const search = searchValue ? `search=${searchValue}` : '';
     // если sortProperty содержит минус,
     // тогда делаем сортировку по возрастанию
     // order-desc - по убыванию
 
     axios
       .get(
-        `https://632cad725568d3cad88ad212.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`,
+        `https://632cad725568d3cad88ad212.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}&${search}`,
       )
       .then((response) => {
         setItems(response.data);
         setIsLoading(false);
       }); // сохраняем пиццы в массив (изменяем состояние items)
     window.scrollTo(0, 0); // перемещаем окно в исходное положение
-  }, [activeCategory, activeSort]); // второй параметр - условие (в данном случае [] - didMount), то есть функция сработает только один раз
+  }, [activeCategory, activeSort, searchValue]); // второй параметр - условие (в данном случае [] - didMount), то есть функция сработает только один раз
   // при изменении массива вызывается функция (если передать items - будет бесконечный вызов функции)
   // так как каждый раз массив items обновляется (срабатывает изменение состояния - setItems(items))
   // теперь при изменении activeCategory и activeSort useEffect будет срабатывать каждый раз (на их изменение)
@@ -58,19 +59,12 @@ const Home = () => {
           ? // в данном случае создаем фейковый массив
             // для предпоказа скелетонов пицц
             [...new Array(10)].map((_, index) => <Skeleton key={index} />)
-          : items.map((pizza) => (
-              <PizzaBlock
-                key={pizza.id}
-                {...pizza} // spread-оператор
-                // дестректурием объект (вытаскиваем все свойства объекта и передаем в компонент)
-
-                // name={pizza.name}
-                // price={pizza.price}
-                // image={pizza.imageUrl}
-                // types={pizza.types}
-                // sizes={pizza.sizes}
-              />
-            ))}
+          : items
+              // .filter((object) => {
+              //   return object.name.toLowerCase().includes(searchValue.toLowerCase());
+              //   // возвращаем только те пиццы, название которых совпадает с введенным в инпут значением
+              // })
+              .map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
       </div>
     </div>
   );
