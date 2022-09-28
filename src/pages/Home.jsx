@@ -8,6 +8,7 @@ import Skeleton from '../components/pizzaBlock/SkeletonBlock';
 import axios from 'axios';
 
 import '../scss/app.scss';
+import Pagination from '../components/UI/pagination/Pagination';
 
 const Home = ({ searchValue }) => {
   const [items, setItems] = React.useState([]); // массив пицц
@@ -19,6 +20,8 @@ const Home = ({ searchValue }) => {
     sortProperty: 'rating',
   });
 
+  const [currentPage, setCurrentPage] = React.useState(1);
+
   React.useEffect(() => {
     setIsLoading(true);
     // useEffect() позволяет отлавливать действия (служит для первого рендера приложения  )
@@ -26,20 +29,21 @@ const Home = ({ searchValue }) => {
     const sortBy = activeSort.sortProperty.replace('-', '');
     const order = activeSort.sortProperty.includes('-') ? 'asc' : 'desc';
     const search = searchValue ? `search=${searchValue}` : '';
+
     // если sortProperty содержит минус,
     // тогда делаем сортировку по возрастанию
     // order-desc - по убыванию
 
     axios
       .get(
-        `https://632cad725568d3cad88ad212.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}&${search}`,
+        `https://632cad725568d3cad88ad212.mockapi.io/items?page=${currentPage}&limit=8&${category}&sortBy=${sortBy}&order=${order}&${search}`,
       )
       .then((response) => {
         setItems(response.data);
         setIsLoading(false);
       }); // сохраняем пиццы в массив (изменяем состояние items)
     window.scrollTo(0, 0); // перемещаем окно в исходное положение
-  }, [activeCategory, activeSort, searchValue]); // второй параметр - условие (в данном случае [] - didMount), то есть функция сработает только один раз
+  }, [activeCategory, activeSort, searchValue, currentPage]); // второй параметр - условие (в данном случае [] - didMount), то есть функция сработает только один раз
   // при изменении массива вызывается функция (если передать items - будет бесконечный вызов функции)
   // так как каждый раз массив items обновляется (срабатывает изменение состояния - setItems(items))
   // теперь при изменении activeCategory и activeSort useEffect будет срабатывать каждый раз (на их изменение)
@@ -66,6 +70,7 @@ const Home = ({ searchValue }) => {
               // })
               .map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
       </div>
+      <Pagination onChangePage={(number) => setCurrentPage(number)} />
     </div>
   );
 };
