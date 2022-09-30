@@ -1,8 +1,13 @@
 import React from 'react';
 
+import { SearchContext } from '../../../App'; // деструктуризируем, чтобы достать контекст
+
 import styles from './Search.module.scss';
 
-const Search = ({ searchValue, setSearchValue }) => {
+const Search = () => {
+  const { searchValue, setSearchValue } = React.useContext(SearchContext); // хук ссылается на переменную в App.js,
+  // в которой в провайдере хранится состояние SearchValue и метод
+
   return (
     <div className={styles.main}>
       <svg className={styles.icon} viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">

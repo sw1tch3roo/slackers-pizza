@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import logoPizza from '../../assets/img/pizza-logo.svg';
 import Search from '../UI/search/Search';
 
-const Header = ({ searchValue, setSearchValue }) => {
+const Header = () => {
   return (
     <div className="header">
       <div className="container">
@@ -17,7 +17,7 @@ const Header = ({ searchValue, setSearchValue }) => {
             </div>
           </div>
         </Link>
-        <Search searchValue={searchValue} setSearchValue={setSearchValue} />
+        <Search />
         <Link to="/cart">
           <div className="header__cart">
             <div className="button button--cart">

@@ -9,11 +9,13 @@ import axios from 'axios';
 
 import '../scss/app.scss';
 import Pagination from '../components/UI/pagination/Pagination';
+import { SearchContext } from '../App';
 
-const Home = ({ searchValue }) => {
+const Home = () => {
+  const { searchValue } = React.useContext(SearchContext);
+
   const [items, setItems] = React.useState([]); // массив пицц
   const [isLoading, setIsLoading] = React.useState(Boolean);
-
   const [activeCategory, setActiveCategory] = React.useState(0);
   const [activeSort, setActiveSort] = React.useState({
     name: 'по рейтингу ↓', // по умолчанию будет
