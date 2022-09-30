@@ -1,6 +1,9 @@
 import React from 'react';
+import { HomeContext } from '../../pages/Home';
 
-const Categories = ({ activeCategory, onChangeCategory }) => {
+const Categories = () => {
+  const { activeCategory, onChangeCategory } = React.useContext(HomeContext);
+
   const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
   return (

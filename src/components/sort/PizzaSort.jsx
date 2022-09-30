@@ -1,6 +1,9 @@
 import React from 'react';
+import { HomeContext } from '../../pages/Home';
 
-const PizzaSort = ({ activeSort, onChangeSort }) => {
+const PizzaSort = () => {
+  const { activeSort, onChangeSort } = React.useContext(HomeContext);
+
   const listOfSort = [
     { name: 'по рейтингу ↓', sortProperty: 'rating' },
     { name: 'по рейтингу ↑', sortProperty: '-rating' },

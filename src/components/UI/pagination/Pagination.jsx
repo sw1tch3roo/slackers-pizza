@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
+import { HomeContext } from '../../../pages/Home';
 
 import styles from './Pagination.module.scss';
 
-const Pagination = ({ onChangePage }) => {
+const Pagination = () => {
+  const { onChangePage } = React.useContext(HomeContext);
+
   return (
     <ReactPaginate
       className={styles.main}
