@@ -4,35 +4,22 @@ import PizzaCategories from '../components/categories/PizzaCategories';
 import PizzaBlock from '../components/pizzaBlock/PizzaBlock';
 import PizzaSort from '../components/sort/PizzaSort';
 import Skeleton from '../components/pizzaBlock/SkeletonBlock';
+import Pagination from '../components/UI/pagination/Pagination';
 
 import axios from 'axios';
 
 import '../scss/app.scss';
-import Pagination from '../components/UI/pagination/Pagination';
-import { SearchContext } from '../App';
 
-export const HomeContext = React.createContext();
+import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const { searchValue } = React.useContext(SearchContext);
-
   const [items, setItems] = React.useState([]); // массив пицц
   const [isLoading, setIsLoading] = React.useState(Boolean);
-  const [activeCategory, setActiveCategory] = React.useState(0);
-  const [activeSort, setActiveSort] = React.useState({
-    name: 'по рейтингу ↓', // по умолчанию будет
-    sortProperty: 'rating',
-  });
 
-  const [currentPage, setCurrentPage] = React.useState(1);
-
-  const onChangeCategory = (id) => {
-    setActiveCategory(id);
-  };
-
-  const onChangeSort = (object) => setActiveSort(object);
-
-  const onChangePage = (number) => setCurrentPage(number);
+  const activeCategory = useSelector((state) => state.filterReducer.category);
+  const activeSort = useSelector((state) => state.filterReducer.sort);
+  const currentPage = useSelector((state) => state.pageReducer.page);
+  const searchValue = useSelector((state) => state.searchReducer.value);
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -63,30 +50,26 @@ const Home = () => {
   // теперь при изменении activeCategory и activeSort useEffect будет срабатывать каждый раз (на их изменение)
 
   return (
-    <HomeContext.Provider
-      value={{ activeCategory, onChangeCategory, activeSort, onChangeSort, onChangePage }}
-    >
-      <div className="container">
-        <div className="content__top">
-          <PizzaCategories />
-          <PizzaSort />
-        </div>
-        <h2 className="content__title">Все пиццы</h2>
-        <div className="content__items">
-          {isLoading
-            ? // в данном случае создаем фейковый массив
-              // для предпоказа скелетонов пицц
-              [...new Array(10)].map((_, index) => <Skeleton key={index} />)
-            : items
-                // .filter((object) => {
-                //   return object.name.toLowerCase().includes(searchValue.toLowerCase());
-                //   // возвращаем только те пиццы, название которых совпадает с введенным в инпут значением
-                // })
-                .map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
-        </div>
-        <Pagination />
+    <div className="container">
+      <div className="content__top">
+        <PizzaCategories />
+        <PizzaSort />
       </div>
-    </HomeContext.Provider>
+      <h2 className="content__title">Все пиццы</h2>
+      <div className="content__items">
+        {isLoading
+          ? // в данном случае создаем фейковый массив
+            // для предпоказа скелетонов пицц
+            [...new Array(10)].map((_, index) => <Skeleton key={index} />)
+          : items
+              // .filter((object) => {
+              //   return object.name.toLowerCase().includes(searchValue.toLowerCase());
+              //   // возвращаем только те пиццы, название которых совпадает с введенным в инпут значением
+              // })
+              .map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
+      </div>
+      <Pagination />
+    </div>
   );
 };
 

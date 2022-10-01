@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { SearchContext } from '../../../App'; // деструктуризируем, чтобы достать контекст
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearchTargetValue } from '../../../redux/slices/searchSlice';
 
 import styles from './Search.module.scss';
 
 const Search = () => {
-  const { searchValue, setSearchValue } = React.useContext(SearchContext); // хук ссылается на переменную в App.js,
-  // в которой в провайдере хранится состояние SearchValue и метод
+  const searchValue = useSelector((state) => state.searchReducer.value);
+  const dispatch = useDispatch();
 
   return (
     <div className={styles.main}>
@@ -21,7 +22,7 @@ const Search = () => {
         // чтобы в ДОМ-элементе происходили изменения
         // т.е. если мы произведем очистку, то значение searchValue изменится (в App.js)
         // но input об этом ничего не узнает, поэтому мы и передаем в value его значение
-        onChange={(event) => setSearchValue(event.target.value)}
+        onChange={(event) => dispatch(setSearchTargetValue(event.target.value))}
         // при каждом изменении состояния вызывается фукнция
         // в данном случае при каждом вводе какого-либо символа строка будет сохраняться в searchValue
         className={styles.input}
@@ -30,7 +31,7 @@ const Search = () => {
       {searchValue && ( // если есть какое-либо значение, выводим иконку очистки
         <svg
           className={styles.iconClear}
-          onClick={() => setSearchValue('')}
+          onClick={() => dispatch(setSearchTargetValue(''))}
           viewBox="0 0 88 88"
           xmlns="http://www.w3.org/2000/svg"
         >

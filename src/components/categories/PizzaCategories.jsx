@@ -1,10 +1,12 @@
 import React from 'react';
-import { HomeContext } from '../../pages/Home';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeCategory } from '../../redux/slices/filterSlice';
 
 const Categories = () => {
-  const { activeCategory, onChangeCategory } = React.useContext(HomeContext);
-
   const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+
+  const activeCategory = useSelector((state) => state.filterReducer.category);
+  const dispatch = useDispatch();
 
   return (
     <div className="categories">
@@ -14,7 +16,7 @@ const Categories = () => {
           return (
             <li
               key={index}
-              onClick={() => onChangeCategory(index)} // по индексу делаем перерендер
+              onClick={() => dispatch(changeCategory(index))} // по индексу делаем перерендер
               className={activeCategory === index ? 'active' : ''}
             >
               {category}

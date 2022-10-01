@@ -1,9 +1,8 @@
 import React from 'react';
-import { HomeContext } from '../../pages/Home';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeSort } from '../../redux/slices/filterSlice';
 
 const PizzaSort = () => {
-  const { activeSort, onChangeSort } = React.useContext(HomeContext);
-
   const listOfSort = [
     { name: 'по рейтингу ↓', sortProperty: 'rating' },
     { name: 'по рейтингу ↑', sortProperty: '-rating' },
@@ -14,6 +13,9 @@ const PizzaSort = () => {
   ];
 
   const [isOpenPopup, setIsOpenPopup] = React.useState(false); // pop-up окно сортировки
+
+  const activeSort = useSelector((state) => state.filterReducer.sort);
+  const dispatch = useDispatch();
 
   return (
     <div className="sort">
@@ -41,7 +43,7 @@ const PizzaSort = () => {
                 <li
                   key={index}
                   onClick={() => {
-                    onChangeSort(object);
+                    dispatch(changeSort(object));
                     // вытаскиваем значение, по которому будем производить сортировку
                     setIsOpenPopup(false);
                   }}
