@@ -2,22 +2,22 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   // изначальное состояние
-  page: 1,
+  pizzas: [],
 };
 
-export const pageSlice = createSlice({
-  name: 'pageChanger', // имя слайса
+export const itemsSlice = createSlice({
+  name: 'items', // имя слайса
   // то есть сюда передастся значение из объекта initialState
   initialState, // initialState: initialState  первое состояние (как в useState)
   reducers: {
     // методы, меняющие состояние
-    changePage: (state, action) => {
-      state.page = action.payload;
+    setItems: (state, action) => {
+      state.pizzas = [...state.pizzas, action.payload];
     },
   },
 });
 
-export const { changePage } = pageSlice.actions;
+export const { setItems } = itemsSlice.actions;
 // экспортированные методы нами же созданные
 
-export default pageSlice.reducer; // обработка всего стейта
+export default itemsSlice.reducer; // обработка всего стейта

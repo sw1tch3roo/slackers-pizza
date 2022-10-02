@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  // подключаем глобальное хранилище ко всему приложению при помощи redux toolkit store
   <Provider store={store}>
     <BrowserRouter>
       <App />

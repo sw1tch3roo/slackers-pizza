@@ -6,14 +6,14 @@ const initialState = {
 };
 
 export const searchSlice = createSlice({
-  name: 'counter', // имя слайса
+  name: 'searchChanger', // имя слайса
   // то есть сюда передастся значение из объекта initialState
   initialState, // initialState: initialState  первое состояние (как в useState)
   reducers: {
-    // методы, меняющие состояние
+    // методы, меняющие состояние - экшены
     setSearchTargetValue: (state, action) => {
       state.value = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload); // event.target.value из инпута
     },
   },
 });

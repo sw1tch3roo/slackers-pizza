@@ -16,8 +16,9 @@ const Home = () => {
   const [items, setItems] = React.useState([]); // массив пицц
   const [isLoading, setIsLoading] = React.useState(Boolean);
 
-  const activeCategory = useSelector((state) => state.filterReducer.category);
-  const activeSort = useSelector((state) => state.filterReducer.sort);
+  const { category: activeCategory, sort: activeSort } = useSelector(
+    (state) => state.filterReducer,
+  );
   const currentPage = useSelector((state) => state.pageReducer.page);
   const searchValue = useSelector((state) => state.searchReducer.value);
 
