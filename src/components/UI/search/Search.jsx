@@ -1,13 +1,35 @@
 import React from 'react';
+import debounce from 'lodash.debounce';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSearchTargetValue } from '../../../redux/slices/searchSlice';
 
 import styles from './Search.module.scss';
 
 const Search = () => {
-  const searchValue = useSelector((state) => state.searchReducer.value);
+  const [value, setValue] = React.useState(''); // локальный стейт для быстрого отображения данных в инпуте
   const dispatch = useDispatch();
+
+  const inputRef = React.useRef(); // для выбора DOM-элемента
+  // reference - ссылка
+
+  const updateSearchValue = React.useCallback(
+    debounce((str) => {
+      dispatch(setSearchTargetValue(str));
+    }, 250),
+    [],
+  );
+
+  const onChangeInput = (event) => {
+    setValue(event.target.value); // меняем значение локального стейта
+    updateSearchValue(event.target.value); // передаем данные (отложенное выполнение функции) в хранилище для отправки запроса
+  };
+
+  // каждый раз при изменении состояния компонент производит ререндер
+  // из-за этого все переменные и функции внутри компонента пересоздаются
+  // что приводит к неправильной работе некоторых функций
+  // для того, чтобы жс понимал, что ссылка на место в памяти функции не меняется
+  // применяется хук useCallback
 
   return (
     <div className={styles.main}>
@@ -18,20 +40,27 @@ const Search = () => {
         </g>
       </svg>
       <input
-        value={searchValue} // реакт рекомендует хранить изменяющееся значение
+        ref={inputRef}
+        value={value} // реакт рекомендует хранить изменяющееся значение
         // чтобы в ДОМ-элементе происходили изменения
         // т.е. если мы произведем очистку, то значение searchValue изменится (в App.js)
         // но input об этом ничего не узнает, поэтому мы и передаем в value его значение
-        onChange={(event) => dispatch(setSearchTargetValue(event.target.value))}
+        onChange={(event) => onChangeInput(event)}
         // при каждом изменении состояния вызывается фукнция
         // в данном случае при каждом вводе какого-либо символа строка будет сохраняться в searchValue
         className={styles.input}
         placeholder="Поиск пиццы..."
       />
-      {searchValue && ( // если есть какое-либо значение, выводим иконку очистки
+      {value && ( // если есть какое-либо значение, выводим иконку очистки
         <svg
           className={styles.iconClear}
-          onClick={() => dispatch(setSearchTargetValue(''))}
+          onClick={() => {
+            setValue('');
+            inputRef.current.focus();
+            dispatch(setSearchTargetValue(''));
+            // inputRef.current - содержит JSX-элемент (инпут)
+            // focus - фокусировка на инпуте
+          }}
           viewBox="0 0 88 88"
           xmlns="http://www.w3.org/2000/svg"
         >
