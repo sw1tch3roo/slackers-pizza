@@ -1,28 +1,36 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import PizzaCategories from '../components/categories/PizzaCategories';
 import PizzaBlock from '../components/pizzaBlock/PizzaBlock';
-import PizzaSort from '../components/sort/PizzaSort';
+import PizzaSort, { listOfSort } from '../components/sort/PizzaSort';
 import Skeleton from '../components/pizzaBlock/SkeletonBlock';
 import Pagination from '../components/UI/pagination/Pagination';
 
 import axios from 'axios';
+import qs from 'qs';
 
 import '../scss/app.scss';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFilters } from '../redux/slices/filterSlice';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isSearch = React.useRef(false);
+  const isMounted = React.useRef(false);
+
   const [items, setItems] = React.useState([]); // массив пицц
   const [isLoading, setIsLoading] = React.useState(Boolean);
 
   const { category: activeCategory, sort: activeSort } = useSelector(
     (state) => state.filterReducer,
   );
-  const currentPage = useSelector((state) => state.pageReducer.page);
+  const currentPage = useSelector((state) => state.filterReducer.page);
   const searchValue = useSelector((state) => state.searchReducer.value);
 
-  React.useEffect(() => {
+  const fetchPizzas = () => {
     setIsLoading(true);
     // useEffect() позволяет отлавливать действия (служит для первого рендера приложения  )
     const category = activeCategory > 0 ? `category=${activeCategory}` : '';
@@ -42,8 +50,50 @@ const Home = () => {
         setItems(response.data);
         setIsLoading(false);
       }); // сохраняем пиццы в массив (изменяем состояние items)
+  };
+
+  // если изменились параметры и был первый рендер, то...
+  React.useEffect(() => {
+    if (isMounted.current) {
+      // был ли первый рендер?
+      const queryString = qs.stringify({
+        sortProperty: activeSort.sortProperty,
+        activeCategory,
+        currentPage,
+      });
+
+      navigate(`?${queryString}`);
+    }
+
+    isMounted.current = true;
+  }, [activeCategory, activeSort.sortProperty, currentPage]);
+
+  // если был первый рендер, то идет проверка URL-параметров и сохранение в Redux'е
+  React.useEffect(() => {
+    if (window.location.search) {
+      // поисковая строчка (для парсинга)
+      const params = qs.parse(window.location.search.substring(1)); // substring удаляем первый символ в строке
+      const sort = listOfSort.find((object) => object.sortProperty === params.sortProperty);
+
+      dispatch(
+        setFilters({
+          ...params,
+          sort,
+        }),
+      );
+
+      isSearch.current = true;
+    }
+  }, []);
+
+  // если был первый рендер, тогда запрашиваются пиццы
+  React.useEffect(() => {
     window.scrollTo(0, 0); // перемещаем окно в исходное положение
-  }, [activeCategory, activeSort, searchValue, currentPage]);
+
+    if (!isSearch.current) fetchPizzas();
+
+    isSearch.current = false;
+  }, [activeCategory, activeSort.sortProperty, searchValue, currentPage]);
 
   // второй параметр - условие (в данном случае [] - didMount), то есть функция сработает только один раз
   // при изменении массива вызывается функция (если передать items - будет бесконечный вызов функции)

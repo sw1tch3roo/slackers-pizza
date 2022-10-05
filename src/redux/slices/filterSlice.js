@@ -7,6 +7,7 @@ const initialState = {
     name: 'по рейтингу ↓', // по умолчанию будет
     sortProperty: 'rating',
   },
+  page: 1,
 };
 
 export const filterSlice = createSlice({
@@ -22,10 +23,21 @@ export const filterSlice = createSlice({
     changeSort(state, action) {
       state.sort = action.payload;
     },
+
+    changePage: (state, action) => {
+      state.page = action.payload;
+    },
+
+    setFilters(state, action) {
+      // вшиваем данные из поисковой строки
+      state.category = Number(action.payload.activeCategory);
+      state.sort = action.payload.sort;
+      state.page = Number(action.payload.currentPage);
+    },
   },
 });
 
-export const { changeCategory, changeSort } = filterSlice.actions; // вытаскиваем из экшнов определенные методы
+export const { changeCategory, changeSort, changePage, setFilters } = filterSlice.actions; // вытаскиваем из экшнов определенные методы
 // экспортированные методы нами же созданные
 
 export default filterSlice.reducer; // обработка всего стейта
