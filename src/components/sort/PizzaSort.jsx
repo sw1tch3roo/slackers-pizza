@@ -13,12 +13,31 @@ export const listOfSort = [
 
 export const PizzaSort = () => {
   const [isOpenPopup, setIsOpenPopup] = React.useState(false); // pop-up окно сортировки
+  const sortRef = React.useRef(); // весь компонент сортировки
 
   const activeSort = useSelector((state) => state.filterReducer.sort);
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.path.includes(sortRef.current)) {
+        // если клик произведен в не области попап-окна
+        setIsOpenPopup(false);
+        // console.log('click outside');
+      }
+    };
+
+    document.body.addEventListener('click', handleClickOutside);
+
+    // если необходимо сделать какие-то действия перед размонтированием компонента,
+    // тогда внутри анонимной функции в Эффекте вызывается еще одна анонимная функция
+    // в которой прописываются необходимые действия
+
+    return () => document.body.removeEventListener('click', handleClickOutside); // unmount компонента (ComponentWillUnmount)
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"

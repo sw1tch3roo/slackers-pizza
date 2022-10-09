@@ -1,10 +1,33 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem } from '../../redux/slices/cartSlice';
 
-const PizzaBlock = ({ name, price, image, types, sizes }) => {
+const PizzaBlock = ({ id, name, price, image, types, sizes }) => {
+  const dispatch = useDispatch();
+
+  const cartItem = useSelector((state) =>
+    state.cartReducer.items.find((object) => object.id === id),
+  );
+
   const typeNames = ['тонкое', 'традиционное'];
 
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
+
+  const addedCount = cartItem ? cartItem.count : 0;
+
+  const onClickAdd = () => {
+    const item = {
+      id,
+      name,
+      price,
+      image,
+      type: typeNames[activeType],
+      size: activeSize,
+    };
+
+    dispatch(addItem(item));
+  };
 
   // <React.Fragment></React.Fragment> так можно делать, чтобы не использовать родительский div при return'е из компонента
 
@@ -45,7 +68,7 @@ const PizzaBlock = ({ name, price, image, types, sizes }) => {
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">от {price} ₽</div>
-          <button className="button button--outline button--add">
+          <button onClick={onClickAdd} className="button button--outline button--add">
             <svg
               width="12"
               height="12"
@@ -59,7 +82,7 @@ const PizzaBlock = ({ name, price, image, types, sizes }) => {
               />
             </svg>
             <span>Добавить</span>
-            <i>0</i>
+            {addedCount > 0 && <i>{addedCount}</i>}
           </button>
         </div>
       </div>

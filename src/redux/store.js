@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import filterReducer from './slices/filterSlice'; // импортируем функцию
 import searchReducer from './slices/searchSlice';
 import itemsReducer from './slices/itemsSlice';
+import cartReducer from './slices/cartSlice';
 
 // хранилище редакса
 export const store = configureStore({
@@ -11,5 +12,6 @@ export const store = configureStore({
     filterReducer, // filter: filterReducer
     searchReducer,
     itemsReducer,
+    cartReducer,
   },
 });
