@@ -2,9 +2,9 @@ import React from 'react';
 import debounce from 'lodash.debounce';
 
 import { useDispatch } from 'react-redux';
-import { setSearchTargetValue } from '../../../redux/slices/searchSlice';
 
 import styles from './Search.module.scss';
+import { changeSearchValue } from '../../../redux/slices/filterSlice';
 
 const Search = () => {
   const [value, setValue] = React.useState(''); // локальный стейт для быстрого отображения данных в инпуте
@@ -15,7 +15,7 @@ const Search = () => {
 
   const updateSearchValue = React.useCallback(
     debounce((str) => {
-      dispatch(setSearchTargetValue(str));
+      dispatch(changeSearchValue(str));
     }, 250),
     [],
   );
@@ -55,9 +55,9 @@ const Search = () => {
         <svg
           className={styles.iconClear}
           onClick={() => {
+            dispatch(changeSearchValue(''));
             setValue('');
             inputRef.current.focus();
-            dispatch(setSearchTargetValue(''));
             // inputRef.current - содержит JSX-элемент (инпут)
             // focus - фокусировка на инпуте
           }}

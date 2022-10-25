@@ -33,11 +33,18 @@ export const cartSlice = createSlice({
       if (findItem) {
         findItem.count--;
       }
+
+      state.totalPrice = state.items.reduce((sum, object) => object.price * object.count + sum, 0);
+
+      if (findItem.count < 1) {
+        state.items = state.items.filter((object) => object.id !== action.payload);
+      }
     },
 
     removeItem(state, action) {
       // полное удаление айтема из массива
       state.items = state.items.filter((object) => object.id !== action.payload);
+      state.totalPrice = state.items.reduce((sum, object) => object.price * object.count + sum, 0);
     },
 
     clearItems(state) {
@@ -46,6 +53,11 @@ export const cartSlice = createSlice({
     },
   },
 });
+
+export const cartSelector = (state) => state.cartReducer;
+
+export const cartItemSelectorById = (id) => (state) =>
+  state.cartReducer.items.find((object) => object.id === id);
 
 export const { addItem, removeItem, clearItems, minusItem } = cartSlice.actions; // вытаскиваем из экшнов определенные методы
 // экспортированные методы нами же созданные

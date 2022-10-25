@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeSort } from '../../redux/slices/filterSlice';
+import { changeSort, filterSortSelector } from '../../redux/slices/filterSlice';
 
 export const listOfSort = [
   { name: 'по рейтингу ↓', sortProperty: 'rating' },
@@ -15,7 +15,7 @@ export const PizzaSort = () => {
   const [isOpenPopup, setIsOpenPopup] = React.useState(false); // pop-up окно сортировки
   const sortRef = React.useRef(); // весь компонент сортировки
 
-  const activeSort = useSelector((state) => state.filterReducer.sort);
+  const activeSort = useSelector(filterSortSelector);
   const dispatch = useDispatch();
 
   React.useEffect(() => {

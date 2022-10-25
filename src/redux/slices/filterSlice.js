@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   // изначальное состояние
+  searchValue: '',
   category: 0,
   sort: {
     name: 'по рейтингу ↓', // по умолчанию будет
@@ -28,16 +29,34 @@ export const filterSlice = createSlice({
       state.page = action.payload;
     },
 
+    changeSearchValue: (state, action) => {
+      state.searchValue = action.payload;
+    },
+
     setFilters(state, action) {
       // вшиваем данные из поисковой строки
-      state.category = Number(action.payload.activeCategory);
-      state.sort = action.payload.sort;
-      state.page = Number(action.payload.currentPage);
+      if (Object.keys(action.payload).length) {
+        state.category = Number(action.payload.activeCategory);
+        state.sort = action.payload.sort;
+        state.page = Number(action.payload.currentPage);
+      } else {
+        state.currentPage = 1;
+        state.category = 0;
+        state.sort = {
+          name: 'по рейтингу ↓', // по умолчанию будет
+          sortProperty: 'rating',
+        };
+      }
     },
   },
 });
 
-export const { changeCategory, changeSort, changePage, setFilters } = filterSlice.actions; // вытаскиваем из экшнов определенные методы
+export const filterSelector = (state) => state.filterReducer;
+export const filterSortSelector = (state) => state.filterReducer.sort;
+export const searchSelector = (state) => state.filterReducer.searchValue;
+
+export const { changeCategory, changeSort, changePage, changeSearchValue, setFilters } =
+  filterSlice.actions; // вытаскиваем из экшнов определенные методы
 // экспортированные методы нами же созданные
 
 export default filterSlice.reducer; // обработка всего стейта
