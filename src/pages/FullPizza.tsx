@@ -2,8 +2,15 @@ import axios from 'axios';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const FullPizza = () => {
-  const [pizza, setPizza] = React.useState();
+interface pizzaItem {
+  image: string;
+  name: string;
+  price: number;
+}
+
+const FullPizza: React.FC = () => {
+  const [pizza, setPizza] = React.useState<pizzaItem>();
+
   const { id } = useParams(); // выцепляем динамический параметр из адресной строки
   const navigate = useNavigate();
 
@@ -23,14 +30,14 @@ const FullPizza = () => {
 
   if (!pizza) {
     // делаем отрисовку до загрузки пиццы
-    return 'Загрузка...';
+    return <>Загрузка...</>; // возвращаем реакт-элемент
   }
 
   return (
     <div className="container">
       <img src={pizza.image} alt="pizza" />
       <h2>{pizza.name}</h2>
-      <h4>{pizza.price}</h4>
+      <h4>{pizza.price} ₽</h4>
     </div>
   );
 };

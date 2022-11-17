@@ -2,7 +2,12 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeSort, filterSortSelector } from '../../redux/slices/filterSlice';
 
-export const listOfSort = [
+interface SortItem {
+  name: string;
+  sortProperty: string;
+}
+
+export const listOfSort: SortItem[] = [
   { name: 'по рейтингу ↓', sortProperty: 'rating' },
   { name: 'по рейтингу ↑', sortProperty: '-rating' },
   { name: 'по цене ↓', sortProperty: 'price' },
@@ -11,15 +16,15 @@ export const listOfSort = [
   { name: 'по алфавиту ↑', sortProperty: '-title' },
 ];
 
-export const PizzaSort = () => {
+export const PizzaSort: React.FC = () => {
   const [isOpenPopup, setIsOpenPopup] = React.useState(false); // pop-up окно сортировки
-  const sortRef = React.useRef(); // весь компонент сортировки
+  const sortRef = React.useRef<HTMLDivElement>(null); // весь компонент сортировки
 
   const activeSort = useSelector(filterSortSelector);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: any) => {
       if (!event.path.includes(sortRef.current)) {
         // если клик произведен в не области попап-окна
         setIsOpenPopup(false);
