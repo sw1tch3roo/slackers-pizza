@@ -15,11 +15,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchItems, itemsSelector } from '../redux/slices/itemsSlice';
 import { filterSelector, searchSelector } from '../redux/slices/filterSlice';
 
-const Home = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isSearch = React.useRef(false);
-  const isMounted = React.useRef(false);
+  const isSearch = React.useRef<boolean>(false);
+  const isMounted = React.useRef<boolean>(false);
 
   const { items, status } = useSelector(itemsSelector); // массив пицц
 
@@ -45,6 +45,7 @@ const Home = () => {
 
     dispatch(
       // все ошибки обработаны в редаксе
+      // @ts-ignore
       fetchItems({
         category,
         sortBy,
@@ -93,7 +94,7 @@ const Home = () => {
   // теперь при изменении activeCategory и activeSort useEffect будет срабатывать каждый раз (на их изменение)
 
   const skeletons = [...new Array(10)].map((_, index) => <Skeleton key={index} />);
-  const pizzas = items.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />);
+  const pizzas = items.map((pizza: any) => <PizzaBlock key={pizza.id} {...pizza} />);
 
   return (
     <div className="container">

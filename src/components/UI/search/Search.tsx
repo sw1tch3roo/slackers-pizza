@@ -6,21 +6,21 @@ import { useDispatch } from 'react-redux';
 import styles from './Search.module.scss';
 import { changeSearchValue } from '../../../redux/slices/filterSlice';
 
-const Search = () => {
-  const [value, setValue] = React.useState(''); // локальный стейт для быстрого отображения данных в инпуте
+const Search: React.FC = () => {
+  const [value, setValue] = React.useState<string>(''); // локальный стейт для быстрого отображения данных в инпуте
   const dispatch = useDispatch();
 
-  const inputRef = React.useRef(); // для выбора DOM-элемента
+  const inputRef = React.useRef<HTMLInputElement>(null); // для выбора DOM-элемента
   // reference - ссылка
 
   const updateSearchValue = React.useCallback(
-    debounce((str) => {
+    debounce((str: string) => {
       dispatch(changeSearchValue(str));
     }, 250),
     [],
   );
 
-  const onChangeInput = (event) => {
+  const onChangeInput = (event: any) => {
     setValue(event.target.value); // меняем значение локального стейта
     updateSearchValue(event.target.value); // передаем данные (отложенное выполнение функции) в хранилище для отправки запроса
   };
@@ -57,7 +57,10 @@ const Search = () => {
           onClick={() => {
             dispatch(changeSearchValue(''));
             setValue('');
-            inputRef.current.focus();
+            // if (inputRef.current) {
+            //   inputRef.current.focus();
+            // }
+            inputRef.current?.focus(); // если не null, тогда выполняется
             // inputRef.current - содержит JSX-элемент (инпут)
             // focus - фокусировка на инпуте
           }}

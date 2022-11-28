@@ -10,26 +10,35 @@ type PizzaBlockProps = {
   image: string;
   types: string[];
   sizes: number[];
+  rating: number;
 };
 
-interface Item {
+type Item = {
   id: number;
   name: string;
   price: number;
   image: string;
   type: string;
   size: number;
-}
+};
 
-const PizzaBlock: React.FC<PizzaBlockProps> = ({ id, name, price, image, types, sizes }) => {
+const PizzaBlock: React.FC<PizzaBlockProps> = ({
+  id,
+  name,
+  price,
+  image,
+  types,
+  sizes,
+  rating,
+}) => {
   const dispatch = useDispatch();
 
   const cartItem: any = useSelector(cartItemSelectorById(id));
 
   const typeNames: string[] = ['тонкое', 'традиционное'];
 
-  const [activeType, setActiveType] = React.useState<any>(0);
-  const [activeSize, setActiveSize] = React.useState(0);
+  const [activeType, setActiveType] = React.useState<number>(0);
+  const [activeSize, setActiveSize] = React.useState<number>(0);
 
   const addedCount = cartItem ? cartItem.count : 0;
 
@@ -62,10 +71,10 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({ id, name, price, image, types, 
               return (
                 <li
                   key={indexType}
-                  onClick={() => setActiveType(type)}
+                  onClick={() => setActiveType(indexType)}
                   className={activeType === indexType ? 'active' : ''}
                 >
-                  {typeNames[type]}
+                  {typeNames[indexType]}
                 </li>
               );
             })}

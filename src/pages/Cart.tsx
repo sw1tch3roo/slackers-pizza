@@ -3,7 +3,7 @@ import CartBlock from '../components/cartBlock/CartBlock';
 
 import '../scss/app.scss';
 
-const Cart = () => {
+const Cart: React.FC = () => {
   return (
     <div>
       <CartBlock />

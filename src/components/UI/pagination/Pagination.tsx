@@ -6,8 +6,8 @@ import { changePage } from '../../../redux/slices/filterSlice';
 
 import styles from './Pagination.module.scss';
 
-const Pagination = () => {
-  const currentPage = useSelector((state) => state.filterReducer.page);
+const Pagination: React.FC = () => {
+  const currentPage: number = useSelector((state: any) => state.filterReducer.page);
   const dispatch = useDispatch();
 
   return (
@@ -20,7 +20,6 @@ const Pagination = () => {
       pageRangeDisplayed={8}
       pageCount={3} // пока хардкожим 3, так как mockapi не возвращает данные о количестве страниц
       forcePage={currentPage - 1}
-      renderOnZeroPageCount={null}
     />
   );
 };

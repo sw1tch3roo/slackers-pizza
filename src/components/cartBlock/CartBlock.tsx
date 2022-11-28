@@ -9,7 +9,7 @@ import CartEmpty from './CartEmpty';
 
 const CartBlock: React.FC = () => {
   const dispatch = useDispatch();
-  const { totalPrice, items } = useSelector((state) => state.cartReducer);
+  const { totalPrice, items } = useSelector((state: any) => state.cartReducer);
 
   const totalCount = items.reduce((sum: number, item: any) => sum + item.count, 0);
 

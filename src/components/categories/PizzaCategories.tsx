@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { changeCategory } from '../../redux/slices/filterSlice';
 
 const Categories: React.FC = () => {
-  const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+  const categories: string[] = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-  const activeCategory = useSelector((state) => state.filterReducer.category);
+  const activeCategory = useSelector((state: any) => state.filterReducer.category);
   const dispatch = useDispatch();
 
   return (
