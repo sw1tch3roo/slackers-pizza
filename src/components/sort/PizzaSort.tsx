@@ -7,6 +7,10 @@ interface SortItem {
   sortProperty: string;
 }
 
+type PopupClick = MouseEvent & {
+  path: Node[];
+};
+
 export const listOfSort: SortItem[] = [
   { name: 'по рейтингу ↓', sortProperty: 'rating' },
   { name: 'по рейтингу ↑', sortProperty: '-rating' },
@@ -24,8 +28,10 @@ export const PizzaSort: React.FC = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (!event.path.includes(sortRef.current)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      const _event = event as PopupClick;
+
+      if (sortRef.current && !_event.path.includes(sortRef.current)) {
         // если клик произведен в не области попап-окна
         setIsOpenPopup(false);
         // console.log('click outside');
